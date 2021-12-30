@@ -1,0 +1,21 @@
+<%= link_to "Browse All Topics", tags_path, class: "boldBlockLinks hideOnMobile" %>
+<div class="leftTagsOuter">
+  <a href="#" class="offCanvasBtn offCanvasBtnClose">&times;</a>
+  <% unless current_user.present? %>
+    <div class="hideOnDesktop sidebarBtn">
+      <%= render 'partials/right_header' %>
+    </div>
+  <% end %>
+  
+  <%= link_to "Browse All Topics", tags_path, class: "boldBlockLinks hideOnDesktop" %>
+
+  <span class="tagsTitle">Trending Topics</span>
+  <ul class="leftPanelTags tag-feed">
+    <% @sidebar_tags.each do |trending_tag| %>
+      <li>
+        <%= link_to trending_tag.title, tag_path(trending_tag) %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+

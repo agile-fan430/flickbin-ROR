@@ -1,0 +1,139 @@
+<% if flash[:notice].present? %>
+  <div class="flashNotification">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<div class="wrapper scroll">
+  <div class="offCanvasMask"></div>
+  <aside class="leftPanel">
+      <button type="button" class="offCanvasBtn offCanvasBtnStyle hideOnDesktop">
+        <span class="offCanvasBar">&nbsp;</span>
+        <span class="offCanvasBar">&nbsp;</span>
+        <span class="offCanvasBar">&nbsp;</span>
+      </button>
+
+      <%= link_to "flickbin", root_path, class: "brand" %>
+      <% if current_user.present? %>
+      <div class="clearfix hideOnDesktop mobileBtnPosition">
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% end %>
+
+      <%= render 'partials/trending_tags_bar' %>
+  </aside>
+  <div class="jq-dropdown-mobile jq-dropdown-medium push-left jq-dropdown-anchor-right">
+    <div class="jq-dropdown-panel jq-dropdown-panel-medium">
+      <div class="dropdown-menu notifications dropdown-menu-medium"></div>
+    </div>
+  </div>
+  <section class="contentPanel station">
+  
+    <% if current_user.present? %>
+      <div class="header mobileThemeBtn hideOnMobile">
+        <div class='header-title'>Account Settings</div>
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% else %>
+      <div class="header btnGroup hideOnMobile">
+        <div class='header-title'>Account Settings</div>
+        <%= render 'partials/right_header' %>
+      </div>
+    <% end %>
+    
+    <div>
+    <%# <div class="redTopBox redBoxInProfile"> %>
+      <%# <div class="clearfix topBtnBottomGap hideOnMobile">
+        <ul class="afterLoginBtns reverseThemeHoler">
+          <li>
+            <span class="addCircle dblBorder edit">
+              <i class="fas fa-pen"></i>
+            </span>
+          </li>
+        </ul>
+      </div> %>
+
+      <div class="redBoxInsideContent">
+        <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-account', method: :put }) do |f| %>
+          <div class="form-account-heading">
+            <div class="form-account-heading-title">
+              General Information
+            </div>
+          </div> 
+          <div class="row">
+            <div class="colHalf">
+              <div class="labelFields">
+                <%= f.label :email, 'Email Address' %>
+                <%= f.email_field :email, class: 'block grayNormal' %>
+                <%= f.error :email %>
+              </div>
+            </div>
+            <div class="colHalf">
+              <div class="labelFields">
+                <%= f.label :channel_name, 'station name' %>
+                <%= f.text_field :channel_name, class: 'block grayNormal' %>
+                <%= f.error :channel_name %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="colHalf">
+              <div class="labelFields">
+                <%= f.label :current_password, "Current Password"%>
+                <%= f.password_field :current_password, class: 'block grayNormal'%>
+                <%= f.error :current_password %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="colHalf">
+              <div class="labelFields">
+                <%= f.label :password, 'New password' %>
+                <%= f.password_field :password, class: 'block grayNormal' %>
+                <%= f.error :password %>
+              </div>
+            </div>
+            <div class="colHalf">
+              <div class="labelFields">
+                <%= f.label :password_confirmation, 'Confirm new password' %>
+                <%= f.password_field :password_confirmation, class: 'block grayNormal' %>
+                <%= f.error :password_confirmation %>
+              </div>
+            </div>
+          </div>
+          <div class="labelFields lastFieldInProfile">
+            <%= f.label :channel_description, 'station description' %>
+            <span class="rightNumber"></span>
+            <%= f.text_field :channel_description, maxlength: AppConstants::MAX_CHANNEL_DESCRIPTION_LENGTH, class: "block hasRightNumber grayNormal" %>
+            <%= f.error :channel_description %>
+          </div>
+
+          <div class="form-account-heading">
+            <div class="form-account-heading-title">
+              Email Preferences
+            </div>
+          </div>
+          <div class="form-checkbox-group">
+          <div class="labelControl">
+              <%= f.input_field :receive_promotional_emails, as: :boolean, class: 'uk-checkbox' %>
+              <%= f.label :receive_promotional_emails, 'RECEIVE FLICKBIN SYSTEM MESSAGES AND NOTIFICATIONS THROUGH EMAIL' %>
+            </div>
+          <div class="labelControl">
+          <%= f.input_field :receive_notification_emails, as: :boolean, class: 'uk-checkbox' %>
+            <%= f.label :receive_notification_emails, 'RECEIVE FLICKBIN PROMOTIONAL AND MARKETING EMAILS' %>
+          </div>
+          </div>
+          <div class="form-account-heading"></div>
+          <div class="form-button-group">
+            <div class="clearfix btnGroup">
+              <%= f.submit "Update Settings", class: "btn btn-secondary" %>
+              <%# <%= link_to "Cancel", station_path(current_user), class: "btn btnSecondary" %>
+            </div>
+          </div>  
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/station') %>

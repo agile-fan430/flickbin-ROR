@@ -1,0 +1,29 @@
+// Active Admin's got SASS!
+@import 'activeadmin_addons/all';
+@import "active_admin/mixins";
+@import "arctic_admin/base";
+@import "jsoneditor/jsoneditor";
+@import "active_admin/json_editor";
+
+// Overriding any non-variable SASS must be done after the fact.
+// For example, to change the default status-tag color:
+//
+//   .status_tag { background: #6090DB; }
+
+.no-click {
+  pointer-events: none;
+  background: #FAFAFA !important;
+  color: #777D82 !important;
+  text-shadow: none !important;
+}
+
+#channel_avatar_preview img {
+  width: 100px;
+  height: 100px;
+}
+
+@media screen and (min-width: 576px) {
+  body.logged_in.new .input .select2-container, body.logged_in.edit .input .select2-container, body.logged_in.create .input .select2-container, body.logged_in.update .input .select2-container {
+      width: 100px !important;
+  }
+}

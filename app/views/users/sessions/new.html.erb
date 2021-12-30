@@ -1,0 +1,43 @@
+<% content_for :meta_description, 'flickbin - Login' %>
+<% content_for :meta_keywords, 'flickbin - Login' %>
+
+<div class="loginBg">
+  <div class="loginAside">
+    <%= link_to "flickbin", root_path, class: "brand inLogin" %>
+    <h2 class="loginTitle">Welcome back. <span>Log into flickbin and start sharing your favorite videos with the world.</span></h2>
+
+    <% if flash[:alert].present? %>
+      <div class="flashError">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <% if params[:video_id].present? &&  params[:event] == 'comment' %>
+        <%= hidden_field_tag('video_id', params[:video_id]) %>
+        <%= hidden_field_tag('event', 'comment') %>
+      <% elsif params[:video_id].present? &&  params[:event] == 'vote' %>
+        <%= hidden_field_tag('video_id', params[:video_id]) %>
+        <%= hidden_field_tag('event', 'vote') %>
+      <% end %>
+
+      <div class="labelFields">
+        <%= f.label :email, 'Email Address' %>
+        <%= f.email_field :email, placeholder: 'Enter your email', class: 'block' %>
+      </div>
+
+      <div class="labelFields">
+        <%= f.label :password %>
+        <%= f.password_field :password, placeholder: 'Enter your password', class: 'block' %>
+      </div>
+
+      <div class="clearfix btnFromLeft loginSignupButtons">
+        <%= f.submit "Log in", class: "btn btn-default" %>
+        <%= link_to "Sign up", new_user_registration_path, class: "btn btn-secondary" %>
+        <%= link_to "Forgot password?", new_password_path(resource_name), class: "forgotLinks fRight" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/login') %>

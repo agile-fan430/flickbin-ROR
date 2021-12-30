@@ -1,0 +1,116 @@
+<% if flash[:notice].present? %>
+  <div class="flashNotification">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+<div class="wrapper scroll">
+  <div class="offCanvasMask"></div>
+  <aside class="leftPanel">
+    <button type="button" class="offCanvasBtn offCanvasBtnStyle hideOnDesktop">
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+    </button>
+
+    <%= link_to "flickbin", root_path, class: "brand" %>
+
+    <!-- show button in mobile -->
+    <% if current_user.present? %>
+      <div class="clearfix hideOnDesktop mobileBtnPosition reverseTheme">
+        <%= render 'users/partials/logged_in_right_header' %>
+      </div>
+    <% end %>
+    <!-- end mobile btn -->
+
+    <%= render 'partials/trending_tags_bar' %>
+  </aside>
+  <div class="jq-dropdown-mobile jq-dropdown-medium push-left jq-dropdown-anchor-right reverseTheme">
+    <div class="jq-dropdown-panel jq-dropdown-panel-medium">
+      <div class="dropdown-menu notifications dropdown-menu-medium"></div>
+    </div>
+  </div>
+  <section class="contentPanel station">
+    <div class="redTopBox">
+      <!-- show button in desktop -->
+      <div class="clearfix bottom-margin-10 hideOnMobile reverseThemeHoler reverseTheme">
+        <% if current_user.present? %>
+          <%= render 'users/partials/logged_in_right_header' %>
+        <% else %>
+          <div class="clearfix btnGroup btnReverseTheme btnGroupTopSpace">
+            <%= render 'partials/right_header' %>
+          </div>
+        <% end %>
+      </div>
+      <!-- end desktop btn -->
+
+      <div class="redBoxInsideContent">
+        <div class="userThumbnail">
+          <div class="userThumbnailHolder">
+            <%= label_tag :user_avatar do %>
+              <%= image_tag(@user.avatar.thumb_128x128.url || '/images/avatar_holder_large.jpg', alt: "User Name", class: "userThumbnailHolder avatar") %>
+              <% if current_user.present? && current_user.id == @user.id %>
+                <%= file_field_tag :user_avatar, class: 'hidden' %>
+                <span class="hoverCamera"><i class="fas fa-camera"></i></span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <div class="cellSpace20"></div>
+        <div class="userActivity">
+          <div class="userActivityLine">
+            <span class="btnActivity">
+              <% if @user.rank.negative? %>
+                <strong>-</strong>
+              <% elsif @user.rank.positive? %>
+                <strong>+</strong>
+              <% end %>
+              <%= @user.rank.abs %>
+            </span>
+            <%= @user.channel_name %>
+          </div>
+          <p><%= @user.channel_description %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class='blankVideos'>
+      <% if current_user.present? && current_user.id == @user.id && @user_videos.blank? %>
+        <span>You haven't posted any videos. <%= link_to 'Post a Video', videos_new_path %>!</span>
+      <% elsif @user_videos.blank? %>
+        <span>This station hasn't posted any videos.</span>
+      <% end %>
+    </div>
+
+    <ul class="entityList inTag tagNewest stationList video-feed" channel_slug="<%= @user.slug %>">
+      <% @user_videos.each do |video| %>
+        <li class="entityRow" slug="<%= video.slug %>">
+          <div class="entityCellStation thumbnailCell">
+            <%= link_to video_path(video), class: "stationThumbnailLink large" do %>
+              <%= image_tag(video.cover.url.to_s, alt: video.title, class: "stationThumbnail large") %>
+              <span class="playerIcon displayNone"><i class="fas fa-play"></i></span>
+            <% end %>
+          </div>
+          <div class="entityCellStation hasRemover">
+            <span class="postTime">
+              posted
+              <%= "#{time_ago_in_words(video.created_at)} ago"%>
+              <%= link_to video.tag.title, tag_path(video.tag) %>
+            </span>
+            <%= link_to video.title, video_path(video), class: "descText" %>
+            <% if current_user.present? && current_user.id == @user.id %>
+              <div class="removerBar" id="<%= video.id %>">
+                <span class="removerBarTrack">Are you sure?
+                  <%= link_to 'Yes', video_path(video), method: :delete, remote: true %>
+                  <a href="#" class="rejectDestroyVideo">No</a>
+                </span>
+                <a href="#" class="removeIcon">&times;</a>
+              </div>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/station') %>

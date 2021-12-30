@@ -1,0 +1,28 @@
+:dynamic: true
+:schedule:
+  recalculate_videos_rank_job:
+    every: 60m
+    class: RecalculateVideosRankJob
+  recalculate_tags_rank_job:
+    every: 30m
+    class: RecalculateTagsRankJob
+  recalculate_top_contributors_job:
+    every: 5m
+    class: RecalculateTopContributorsJob
+  update_untagged_video_job:
+    every: 30m
+    class: UpdateUntaggedVideoJob
+  update_thumbnails_for_videos_job:
+    every: 60m
+    class: UpdateThumbnailsForVideosJob
+
+:queues:
+  - rank_calculation
+  - rank_contributor_cal
+  - rank_video_cal
+  - rank_video_special_cal
+  - video_tag_expiration
+  - twitter_posting
+  - default
+  - mailers
+  - thumbnail_for_video

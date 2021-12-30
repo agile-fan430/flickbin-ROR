@@ -1,0 +1,35 @@
+<% content_for :meta_title, @meta_title %>
+
+<div class="wrapper scroll ">
+  <div class="offCanvasMask"></div>
+  <aside class="leftPanel">
+    <div>
+      <button type="button" class="offCanvasBtn offCanvasBtnStyle hideOnDesktop">
+        <span class="offCanvasBar">&nbsp;</span>
+        <span class="offCanvasBar">&nbsp;</span>
+        <span class="offCanvasBar">&nbsp;</span>
+      </button>
+
+      <%= link_to "flickbin", root_path, class: "brand" %>
+      <% if current_user.present? %>
+        <div class="clearfix hideOnDesktop mobileBtnPosition">
+          <%= render 'partials/logged_in_right_header' %>
+        </div>
+      <% end %>
+
+      <%= render 'partials/trending_tags_bar' %>
+    </div>
+
+  </aside>
+  <div class="jq-dropdown-mobile jq-dropdown-medium push-left jq-dropdown-anchor-right">
+    <div class="jq-dropdown-panel jq-dropdown-panel-medium">
+      <div class="dropdown-menu notifications dropdown-menu-medium"></div>
+    </div>
+  </div>
+  <section class="videoContentPanel specificVideo comments">
+<%= render(partial: "statics/partials/#{params[:page]}") %>
+    
+  </section>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/specific_video') %>

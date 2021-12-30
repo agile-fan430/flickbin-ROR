@@ -1,0 +1,93 @@
+<div class="wrapper scroll">
+  <div class="offCanvasMask"></div>
+  <aside class="leftPanel">
+    <button type="button" class="offCanvasBtn offCanvasBtnStyle hideOnDesktop">
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+    </button>
+    <%= link_to "flickbin", root_path, class: "brand" %>
+    <% if current_user.present? %>
+      <div class="clearfix hideOnDesktop mobileBtnPosition">
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% end %>
+
+    <%= render 'partials/trending_tags_bar' %>
+  </aside>
+  <div class="jq-dropdown-mobile jq-dropdown-medium push-left jq-dropdown-anchor-right">
+    <div class="jq-dropdown-panel jq-dropdown-panel-medium">
+      <div class="dropdown-menu notifications dropdown-menu-medium"></div>
+    </div>
+  </div>
+  <section class="container-tags leftSpace36 tag ">
+    <% if current_user.present? %>
+      <div class="clearfix bottom-margin-20 mobileThemeBtn hideOnMobile">
+        <span class="sideTitleTagSpecific titleSpecific titleSpecificMargin" slug="<%= @tag.slug %>"><!--<span class="icon icon-playlist_add"></span>--><%= tag_heading_title %></span>
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% else %>
+      <div class="clearfix btnGroup btnGroupSpecific hideOnMobile">
+        <span class="sideTitleTagSpecific titleSpecific titleSpecificMargin" slug="<%= @tag.slug %>"><!--<span class="icon icon-playlist_add"></span>--><%= tag_heading_title %></span>
+        <%= render 'partials/right_header' %>
+      </div>
+    <% end %>
+    <% if @top_3_contribution_points.present? %>
+      <div class="topContributorHeadline">
+        <span>Top <%= "contributor".pluralize(@top_3_contribution_points.size) %> in <%= tag_title %></span>
+      </div>
+      <% if Rails.env.development? || Rails.env.staging? %>
+        <div class="topContributorHeadline">
+          <span> (Display only for staging) Comments count = <%= @tag.comments.size %></span>
+        </div>
+      <% end %>
+      <div class="topContributorWrapper">
+        <ul class="contributorList clearfix">
+          <% @top_3_contribution_points.each_with_index do |cp, index| %>
+            <li class="contributorLineItem">
+              <div class="topContributorRank">
+                <span><%= index + 1 %></span>
+              </div>
+              <div class="topContributorAvatar">
+                <%= image_tag(cp.user.avatar.thumb_128x128.url || '/images/avatar_holder_large.jpg') %>
+              </div>
+              <span class="topContributorStation">
+                <%= link_to "(#{cp.user.rank}) #{cp.user.channel_name}", station_path(cp.user) %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+        <div class="wannaBeFeatured">
+          <p>
+            <%= image_tag("/images/flickBearOnboarding.png", alt: 'flickbear', class: 'flickBearWannaBeFeatured') %>
+            <span>Wanna be featured at the top of this topic?</span>
+            <%= link_to 'Post Some Videos!', videos_new_path %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+    <div class="tagSpecificWrapper">
+      <% if @tag_videos.present? %>
+        <div class="tagHeadingBottomGap">
+          <span class="sideTitleTagSpecific titleSpecific hideOnDesktop" slug="<%= @tag.slug %>"><!-- <span class="subscribe-tag"><span class="icon icon-playlist_add"></span></span> <span class="subscribe-tag unfollow"><span class="icon icon-check"></span></span> --><%= tag_heading_title %></span>
+          <ul class="pillNav clearfix">
+            <li><%= link_to 'top charts', tag_path(@tag), sort_by: 'top_charts', class: "top_charts filter", remote: true %></li>
+            <li> <%= link_to 'newest', tag_path(@tag), sort_by: 'newest', class: "filter" %></li>
+          </ul>
+        </div>
+
+        <ul class="entityList inTag specificTagList tagListHasNumber video-feed" video_ids="<%= @current_user_voted_video_ids %>">
+          <%= render 'tags/partials/videos_feed' %>
+        </ul>
+      <% else %>
+        <div class='blankVideos'>
+          <span>
+            This tag is empty. Be the first to <%= link_to 'post a video', videos_new_path %>!
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/specific_tag') %>

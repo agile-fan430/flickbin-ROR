@@ -1,0 +1,43 @@
+<% content_for :meta_description, 'flickbin - Login' %>
+<% content_for :meta_keywords, 'flickbin - Login' %>
+
+<div class="loginBg">
+  <div class="loginAside">
+    <%= link_to "flickbin", root_path, class: "brand inLogin bottomMargin50" %>
+    <h2 class="loginTitle bottomMargin50">Welcome to our community.
+      <span>Sign up to begin sharing your favorite videos with the world!</span>
+    </h2>
+
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <div class="labelFields">
+        <div class="form-control">
+          <%= f.label :channel_name, 'station name' %>
+          <span class="rightNumber"></span>
+          <%= f.text_field :channel_name, placeholder: 'Enter your station name',
+                                          maxlength: AppConstants::MAX_CHANNEL_NAME_LENGTH,
+                                          class: 'block' %>
+        </div>
+        <%= f.error :channel_name %>
+      </div>
+      <div class="labelFields">
+        <%= f.label :email, 'Email Address' %>
+        <%= f.email_field :email, placeholder: 'Enter your email', class: 'block' %>
+        <%= f.error :email, class: 'error' %>
+      </div>
+      <div class="labelFields bottomMargin50">
+        <%= f.label :password %>
+        <%= f.password_field :password, placeholder: 'Enter your password', class: 'block' %>
+        <%= f.error :password, class: 'error' %>
+      </div>
+      <span>By signing up, you agree to the flickbin, LLC <%= link_to 'User Agreement', statics_path('user_agreement') %> and <%= link_to 'Privacy Policy', statics_path('privacy_policy') %>, including <%= link_to 'Cookie Use', statics_path('cookies_policy') %>.</span>
+
+      <div class="clearfix btnFromLeft loginSignupButtons">
+        <%= f.submit "Sign up", class: 'btn btn-default' %>
+        <%= link_to "Log in", new_user_session_path, class: 'btn btn-secondary' %>
+        <%= link_to "Forgot Password?", new_user_password_path, class: "forgotLinks fRight" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_include_tag('specific_by_templates/sign_up') %>

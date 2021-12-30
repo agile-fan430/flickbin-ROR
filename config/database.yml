@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: birdy
+  user: <%= ENV["PG_USERNAME"] %>
+  password: <%= ENV["PG_PASSWORD"] %>
+  pool: 5
+
+development:
+  <<: *default
+  host: <%= ENV["PG_HOST"] %>
+
+test:
+  <<: *default
+  database: birdy_test
+
+staging:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>

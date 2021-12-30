@@ -1,0 +1,15 @@
+development:
+  adapter: async
+
+test:
+  adapter: async
+
+staging:
+  adapter: redis
+  url: <%= "#{ENV["REDIS_URL"]}/1" %>
+  channel_prefix: birdy_stagign
+
+production:
+  adapter: redis
+  url: <%= "#{ENV["REDIS_URL"]}/1" %>
+  channel_prefix: birdy_production

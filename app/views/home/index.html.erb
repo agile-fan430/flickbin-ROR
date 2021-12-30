@@ -1,0 +1,112 @@
+<% if flash[:notice].present? %>
+  <div class="flashNotification">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:notice].to_s == I18n.t('devise.registrations.signed_up_but_unconfirmed') %>
+  <div class='flashNotification'>
+    You can
+    <%= link_to 'resend the confirmation', new_confirmation_path(:user) %>
+    if you haven't received confirmation instructions.
+  </div>
+<% end %>
+
+<div class="wrapper">
+  <div class="offCanvasMask"></div>
+  <aside class="leftPanel">
+    <button type="button" class="offCanvasBtn offCanvasBtnStyle hideOnDesktop">
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+      <span class="offCanvasBar">&nbsp;</span>
+    </button>
+
+    <%= link_to "flickbin", root_path, class: "brand" %>
+    <% if current_user.present? %>
+      <div class="clearfix hideOnDesktop mobileBtnPosition">
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% end %>
+
+    <%= render 'partials/trending_tags_bar' %>
+  </aside>
+  <div class="jq-dropdown-mobile jq-dropdown-medium push-left jq-dropdown-anchor-right">
+    <div class="jq-dropdown-panel jq-dropdown-panel-medium">
+      <div class="dropdown-menu notifications dropdown-menu-medium"></div>
+    </div>
+  </div>
+  <section class="contentPanel home">
+    <% if current_user.present? %>
+      <div class="clearfix bottom-margin-40 mobileThemeBtn hideOnMobile">
+        <%= render 'partials/logged_in_right_header' %>
+      </div>
+    <% else %>
+      <div class="clearfix btnGroup hideOnMobile">
+        <%= render 'partials/right_header' %>
+      </div>
+    <% end %>
+    <div class="homeOnboardingContainer ">
+      <div class="homeOnboardingCopy ">
+        <%= image_tag("/images/flickBearOnboarding.png", alt: 'flickbear', class: 'flickbearHomeOnboarding') %>
+        <p><strong>Welcome!</strong> flickbin is a collection of the best videos from around the web, submitted, organized and ranked by our community.</p>
+      </div>
+      <div class="homeOngoardingButtonContainer clearfix">
+        <% if current_user.present? %>
+          <%= link_to 'Start Contributing, Post a Video!', videos_new_path, class: "btn homeOnboardingButton" %>
+        <% else %>
+          <%= link_to 'Sign Up and Join the Community', new_user_registration_path, class: "btn homeOnboardingButton" %>
+        <% end %>
+      </div>
+    </div>
+
+
+    <section id="section-videos" class="section section-videos">
+      <header class="section-header">
+        <h2 class="section-title">What’s Happening</h2>
+      </header>
+      <div class="section-body">
+        <div class="grid grid-video">
+          <% @videos.each do |video| %>
+          <div id="<%= video.id %>" class="grid-item">
+            <div class="card card-video">
+              <figure class="card-background">
+                <%= image_tag home_cover_for(video) %>
+              </figure>
+              <%if video.slug?%>
+              <%=link_to '', video_path(home_slug_for(video)), class: "card-overlay"%>
+              <%end%>
+              <div class="card-foreground">
+                <%= link_to(station_path(home_user_slug(video)), class: 'card-header') do %>
+                  <figure class="card-image">
+                    <%= image_tag(home_user_avatar_for(video) || '/images/avatar_holder.jpg',  alt: "Person") %>
+                  </figure>
+                  <h5 class="card-title">
+                    <%= home_user_channel_name_for(video)%>
+                  </h5>
+                <% end %>
+                <div class="card-body">
+                  <%=link_to home_title_for(video), video_path(video), class: "card-description"%>
+                  <div class="card-posted-by">
+                    <% if home_video_from_youtube?(video) %>
+                      <span class="icon icon-youtube"></span>
+                    <% elsif home_video_from_daily_motion?(video) %>
+                      <span class="icon icon-dailymotion"></span>
+                    <% elsif home_video_from_twitch?(video) %>
+                      <span class="icon fab fa-twitch"></span>
+                    <% end %>
+                    posted in <a href="<%= tag_path(home_tag_slug_for(video)) %>" class="card-link bold"><%=home_tag_title_for(video)%></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  </section>
+</div>
+
+<a id="js-scroll-trigger" href="#section-videos" class="btn btn-primary newVideoBtn" uk-scroll></a>
+
+<%= javascript_include_tag('specific_by_templates/home') %>
